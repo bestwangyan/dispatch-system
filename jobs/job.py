@@ -28,5 +28,5 @@ class Job:
 
     def stop(self):
         pass
-        print('Job {0} stopped . The status is {1} haha'.format(self.job_id, self.status))
+        print('Job {0} stopped . The status is {1}'.format(self.job_id, self.status))
         time.sleep(1)
