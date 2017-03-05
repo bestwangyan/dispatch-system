@@ -7,6 +7,7 @@
 from Queue import Queue
 from multiprocessing.managers import BaseManager
 import time
+from config import config
 
 
 class Master:
@@ -23,11 +24,17 @@ class Master:
     def start(self):
         BaseManager.register('get_dispatched_job_queue', callable=self.get_dispatched_job_queue)
         BaseManager.register('get_finished_job_queue', callable=self.get_finished_job_queue)
-        manager = BaseManager(address=('192.168.0.50', 8888), authkey='test')
+        manager = BaseManager(address=(config.config_info['server_ip'], config.config_info['server_port']),
+                              authkey=config.config_info['authkey'])
         manager.start()
+        self.dispatched_queue = manager.get_dispatched_job_queue()
+        self.finished_queue = manager.get_finished_job_queue()
         print('Manager server started')
         while True:
-           time.sleep(100)
+            print('\n'+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))+':')
+            print('\tdispatched job :{0}'.format(self.dispatched_queue.qsize()))
+            print('\tfinished job :{0}'.format(self.finished_queue.qsize()))
+            time.sleep(3)
 
 
 if __name__ == '__main__':

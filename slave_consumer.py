@@ -6,9 +6,7 @@
 # CreationDate:20160909
 from Queue import Queue
 from multiprocessing.managers import BaseManager
-import random as r
-import job
-import time
+from config import config
 
 
 class SlaveProd:
@@ -23,11 +21,9 @@ class SlaveProd:
         print('start to work')
         while True:
             new_job=self.dispatched_queue.get()
-            print('Got new job :{0}'.format(new_job['file_id']))
-            new_job['status']='S'
-            time.sleep(3)
+            print('\nGot new job :{0}'.format(new_job.job_id))
+            new_job.work()
             self.finished_queue.put(new_job)
-
 
     def start(self):
         self.manager.connect()
@@ -38,5 +34,7 @@ class SlaveProd:
 
 
 if __name__ == '__main__':
-    producer = SlaveProd('192.168.0.50', 8888, 'test')
+    producer = SlaveProd(config.config_info['server_ip'],
+                         config.config_info['server_port'],
+                         config.config_info['authkey'])
     producer.start()

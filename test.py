@@ -2,11 +2,13 @@
 # coding=utf-8
 import Queue
 
+from jobs import job
+
+new_job= job.Job(123, '.jpg')
+print(new_job.file_id)
+
 q=Queue.Queue()
+q.put(new_job)
+another_job=q.get()
 
-test_str='''伟大的中华人民共和国'''
-
-for i in xrange(10000000):
-    q.put(str(i)+test_str)
-
-print(q.qsize())
+print(another_job.file_type)
